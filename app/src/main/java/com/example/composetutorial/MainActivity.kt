@@ -3,33 +3,68 @@ package com.example.composetutorial
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.composetutorial.ui.theme.ComposeTutorialTheme
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MessageCard("Hello world!")
+            MessageCard(Message(author = "Android", body = "Jetpack Compose"))
         }
     }
 
     @Composable
-    fun MessageCard(name: String) {
-        Text(text = "Hello $name!")
+    fun MessageCard(message: Message) {
+        /**
+         * @Column organize elements vertically
+         * @Row organize elements horizontally
+         * @Box organize elements by stack
+         * @modifier can change the size, appearance, design and add interactions like click listeners
+         */
+        Row(modifier = Modifier.padding(all = 8.dp)) {
+
+            Image(
+                painter = painterResource(id = R.drawable.profile_picture),
+                contentDescription = "Contact profile picture",
+                modifier = Modifier
+                    .size(40.dp) // Set image size to 40dp
+                    .clip(CircleShape) // Clip image to be shaped as a circle
+                )
+            // Add horizontal space betwen the image and the column
+            Spacer(modifier = Modifier.width(8.dp))
+            Column {
+                Text(message.author)
+                // Add a vertical space between the author and message texts
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(message.body)
+            }
+        }
+
     }
 
     @Preview // Show the preview in a function without parameters
     @Composable
     fun PreviewMessageCard() {
-        MessageCard(name = "Android")
+        MessageCard(Message(author = "Colleague", body = "Hey, take a look at Jetpack Compose, it's great!"))
     }
 
 
 }
+
+// Data class that contains the title and description
+data class Message(val author: String, val body: String)
